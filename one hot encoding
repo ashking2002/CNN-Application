@@ -1,0 +1,59 @@
+Performing One hot encoding:
+
+def convert_to_one_hot(Y, C):
+    Y = np.eye(C)[Y.reshape(-1)].T
+    return Y
+    
+    Y_train = convert_to_one_hot(Y_train_orig, 6).T
+Y_test = convert_to_one_hot(Y_test_orig, 6).T
+
+print("Result of One-hot encoding of 1st training examples " + str(Y_train[0]))
+print("Result of One-hot encoding of 1st test examples " + str(Y_test[0]))
+
+Data Preprocessing:
+
+Scaling the Train and Test data between 0 to 1, so dividing these data with 255.
+
+print ("number of training examples = " + str(X_train.shape[0]))
+print ("number of test examples = " + str(X_test.shape[0]))
+print ("X_train shape: " + str(X_train.shape))
+print ("Y_train shape: " + str(Y_train.shape))
+print ("X_test shape: " + str(X_test.shape))
+print ("Y_test shape: " + str(Y_test.shape))
+
+Creating Tensorflow placeholders:
+
+def create_placeholders(n_H0, n_W0, n_C0, n_y):
+
+    X = tf.placeholder(tf.float32, [None, n_H0, n_W0, n_C0])
+    Y = tf.placeholder(tf.float32, [None, n_y])
+    
+    return X, Y
+    
+    X, Y = create_placeholders(64, 64, 3, 6)
+print ("X = " + str(X))
+print ("Y = " + str(Y))
+
+Initializing Parameters:
+
+def initialize_parameters():
+    
+    tf.set_random_seed(1)
+
+    W1 = tf.get_variable("W1", [4, 4, 3, 8], initializer=tf.contrib.layers.xavier_initializer(seed=0))
+    W2 = tf.get_variable("W2", [2, 2, 8, 16], initializer=tf.contrib.layers.xavier_initializer(seed=0))
+
+    parameters = {"W1": W1,
+                  "W2": W2}
+    
+    return parameters
+    
+    tf.reset_default_graph()
+with tf.Session() as sess_test:
+    parameters = initialize_parameters()
+    init = tf.global_variables_initializer()
+    sess_test.run(init)
+    print("W1 = " + str(parameters["W1"].eval()[1,1,1]))
+    print("W2 = " + str(parameters["W2"].eval()[1,1,1]))
+    
+    

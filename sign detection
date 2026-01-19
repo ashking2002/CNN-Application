@@ -1,0 +1,57 @@
+Importing Libraries:
+
+import math
+import numpy as np
+import h5py
+import matplotlib.pyplot as plt
+import tensorflow as tf
+from tensorflow.python.framework import ops
+
+Loading the dataset:
+
+def load_dataset():
+    train_dataset = h5py.File('train_signs.h5', "r")
+    train_set_x_orig = np.array(train_dataset["train_set_x"][:]) 
+    train_set_y_orig = np.array(train_dataset["train_set_y"][:])
+
+    test_dataset = h5py.File('test_signs.h5', "r")
+    test_set_x_orig = np.array(test_dataset["test_set_x"][:])
+    test_set_y_orig = np.array(test_dataset["test_set_y"][:])
+    classes = np.array(test_dataset["list_classes"][:])
+    
+    train_set_y_orig = train_set_y_orig.reshape((1, train_set_y_orig.shape[0]))
+    test_set_y_orig = test_set_y_orig.reshape((1, test_set_y_orig.shape[0]))
+    
+    return train_set_x_orig, train_set_y_orig, test_set_x_orig, test_set_y_orig, classes
+    
+    X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
+    
+    Number of training and testing images:
+    
+    print ("Number of training examples = " + str(len(X_train_orig)))
+print ("Number of test examples = " + str(len(X_test_orig)))
+
+Visualizing the raw pixel values of the 1st example of training dataset:
+
+X_train_orig[0]
+
+Showing the data samples and their corresponding labels(y)
+
+def show_data(index):
+  plt.imshow(X_train_orig[index])
+  return print ("Label of the image(y) = " + str(np.squeeze(Y_train_orig[:, index])))
+  
+  show_data(100)
+  
+  Data pre-processing:Scaling the data to keep all the pixel values between 0 and 1
+  
+  X_train = X_train_orig/255.
+X_test = X_test_orig/255.
+
+Visualizing scalled pixel data from the 1st example of training dataset:
+
+X_train[0]
+
+
+  
+  
